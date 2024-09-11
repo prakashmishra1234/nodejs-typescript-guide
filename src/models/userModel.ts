@@ -1,17 +1,19 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
+import { IUser } from "../types/users/User";
 
-const userSchema = new mongoose.Schema({
+// User Schema
+const userSchema: Schema<IUser> = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "Please enter your name"],
-    maxlength: [30, "Name can not exceed 30 characters"],
-    minlength: [4, "Name should have more than 4 characters"],
+    required: [true, "Please enter your name."],
+    maxlength: [30, "Name cannot exceed 30 characters."],
+    minlength: [4, "Name should have more than 4 characters."],
   },
-  Mobile: {
+  mobile: {
     type: String,
+    unique: true,
     required: [true, "Mobile number is required."],
-    maxlength: [10, "Please enter valid mobile number."],
-    minlength: [10, "Please enter valid mobile number."],
+    maxlength: [15, "Please enter a valid mobile number."],
   },
   otp: {
     type: String,
@@ -23,4 +25,5 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model("User", userSchema);
+// Export the mongoose model
+export default mongoose.model<IUser>("User", userSchema);

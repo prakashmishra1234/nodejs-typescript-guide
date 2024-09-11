@@ -12,4 +12,7 @@ app.use(express_1.default.json());
 // Route import
 const userRoute_1 = __importDefault(require("./routes/userRoute"));
 app.use("/api/v1", userRoute_1.default);
+//Middleware for error
+const error_1 = __importDefault(require("./middlewares/error"));
+app.use(error_1.default);
 exports.default = app;

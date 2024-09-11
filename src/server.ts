@@ -3,7 +3,6 @@ import app from "./app";
 
 // Import dotenv to load environment variables
 import dotenv from "dotenv";
-import connectDataBase from "./config/database";
 dotenv.config({ path: "src/config/config.env" }); // Load variables from .env file, specify path to your env file
 
 // Specify the port number for the server
@@ -22,6 +21,7 @@ const server = app.listen(port, () => {
 });
 
 // Connect to the database
+import connectDataBase from "./config/database";
 connectDataBase().catch((err: Error) => {
   console.log(`Shutting down the server due to database connection failure`);
   server.close(() => {

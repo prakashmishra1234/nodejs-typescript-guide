@@ -7,7 +7,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = __importDefault(require("./app"));
 // Import dotenv to load environment variables
 const dotenv_1 = __importDefault(require("dotenv"));
-const database_1 = __importDefault(require("./config/database"));
 dotenv_1.default.config({ path: "src/config/config.env" }); // Load variables from .env file, specify path to your env file
 // Specify the port number for the server
 const port = parseInt(process.env.PORT, 10);
@@ -22,6 +21,7 @@ const server = app_1.default.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
 // Connect to the database
+const database_1 = __importDefault(require("./config/database"));
 (0, database_1.default)().catch((err) => {
     console.log(`Shutting down the server due to database connection failure`);
     server.close(() => {

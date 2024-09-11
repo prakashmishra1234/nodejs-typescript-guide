@@ -1,4 +1,4 @@
-export interface SendMessage {
-  mobileNumber: string;
+export interface ISendMessage {
+  mobile: string;
   message: string;
 }
