@@ -35,8 +35,6 @@ const SendMessage = ({ mobile, message }: ISendMessage): Promise<any> => {
       PhoneNumber: mobile,
     };
 
-    console.log(AWS.config);
-
     sns.publish(params, (err: AWSError, data: PublishResponse) => {
       if (err) {
         reject(err);
