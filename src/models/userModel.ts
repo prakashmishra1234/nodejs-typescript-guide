@@ -12,7 +12,7 @@ const userSchema: Schema<IUser> = new mongoose.Schema({
   mobile: {
     type: String,
     unique: true,
-    required: [true, "Mobile number is required."],
+    required: [true, "Please enter your mobile number."],
     maxlength: [15, "Please enter a valid mobile number."],
   },
   otp: {

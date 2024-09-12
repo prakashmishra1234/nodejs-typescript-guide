@@ -27,8 +27,18 @@ const ErrorMiddleware = (
     err = new ErrorHandler(message, 400);
   }
 
+  // Mongodb dulicate field error
   if (err.code === 11000) {
     const message = `Duplicate ${Object.keys(err.keyValue)} entered.`;
+    err = new ErrorHandler(message, 400);
+  }
+
+  // Mongodb validation error
+  if (err.name === "ValidationError") {
+    const messages = Object.values(err.errors).map(
+      (error: any) => error.message
+    );
+    const message: string = messages[0];
     err = new ErrorHandler(message, 400);
   }
 

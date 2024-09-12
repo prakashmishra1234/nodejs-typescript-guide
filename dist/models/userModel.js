@@ -15,7 +15,7 @@ const userSchema = new mongoose_1.default.Schema({
     mobile: {
         type: String,
         unique: true,
-        required: [true, "Mobile number is required."],
+        required: [true, "Please enter your mobile number."],
         maxlength: [15, "Please enter a valid mobile number."],
     },
     otp: {

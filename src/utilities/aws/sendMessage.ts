@@ -37,7 +37,7 @@ const SendMessage = ({ mobile, message }: ISendMessage): Promise<any> => {
     // Publish the message via SNS
     sns.publish(params, (err, data) => {
       if (err) {
-        reject(new Error("Failed to send SMS"));
+        reject(err);
       } else {
         resolve(data);
       }

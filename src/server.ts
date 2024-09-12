@@ -22,7 +22,7 @@ const server = app.listen(port, () => {
 
 // Connect to the database
 import connectDataBase from "./config/database";
-connectDataBase().catch((err: Error) => {
+connectDataBase(process.env.DB_URI as string).catch((err: Error) => {
   console.log(`Shutting down the server due to database connection failure`);
   server.close(() => {
     process.exit(1);

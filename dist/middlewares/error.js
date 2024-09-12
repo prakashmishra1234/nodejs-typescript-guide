@@ -24,8 +24,15 @@ req, res, next) => {
         const message = `Resource not found. Invalid: ${err.path}.`;
         err = new errorHandler_1.default(message, 400);
     }
+    // Mongodb dulicate field error
     if (err.code === 11000) {
         const message = `Duplicate ${Object.keys(err.keyValue)} entered.`;
+        err = new errorHandler_1.default(message, 400);
+    }
+    // Mongodb validation error
+    if (err.name === "ValidationError") {
+        const messages = Object.values(err.errors).map((error) => error.message);
+        const message = messages[0];
         err = new errorHandler_1.default(message, 400);
     }
     // JWT token invalid error

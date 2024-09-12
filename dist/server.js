@@ -22,7 +22,7 @@ const server = app_1.default.listen(port, () => {
 });
 // Connect to the database
 const database_1 = __importDefault(require("./config/database"));
-(0, database_1.default)().catch((err) => {
+(0, database_1.default)(process.env.DB_URI).catch((err) => {
     console.log(`Shutting down the server due to database connection failure`);
     server.close(() => {
         process.exit(1);
