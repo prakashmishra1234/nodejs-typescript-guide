@@ -3,7 +3,6 @@ import { ISendMessage } from "../../types/users/SendMessage";
 import { PublishResponse } from "aws-sdk/clients/sns";
 
 // Initialize SNS service
-AWS.config.update({ region: process.env.AWS_REGION });
 const sns = new AWS.SNS();
 
 /**
@@ -29,6 +28,7 @@ const sns = new AWS.SNS();
  *   .catch(err => console.error('Error sending message:', err));
  */
 const SendMessage = ({ mobile, message }: ISendMessage): Promise<any> => {
+  console.log(AWS.config);
   return new Promise((resolve, reject) => {
     const params = {
       Message: message,

@@ -16,7 +16,7 @@ exports.registerUser = void 0;
 const userModel_1 = __importDefault(require("../models/userModel"));
 const sendMessage_1 = __importDefault(require("../utilities/aws/sendMessage"));
 const errorHandler_1 = __importDefault(require("../utilities/others/errorHandler"));
-const senData_1 = __importDefault(require("../utilities/others/senData"));
+const sendData_1 = __importDefault(require("../utilities/others/sendData"));
 // register user
 const registerUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, mobile } = req.body;
@@ -39,6 +39,6 @@ const registerUser = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
     if (!user)
         return next(new errorHandler_1.default("User creation failed", 400));
     // send response to user
-    (0, senData_1.default)(201, res, "User created successfully");
+    (0, sendData_1.default)(201, res, "User created successfully");
 });
 exports.registerUser = registerUser;

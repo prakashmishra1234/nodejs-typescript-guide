@@ -5,9 +5,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // import app module
 const app_1 = __importDefault(require("./app"));
+//update  aws config
+const aws_sdk_1 = __importDefault(require("aws-sdk"));
+aws_sdk_1.default.config.update({
+    region: process.env.AWS_REGION,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+});
 // Import dotenv to load environment variables
 const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config({ path: "src/config/config.env" }); // Load variables from .env file, specify path to your env file
+if (process.env.ENV == "development")
+    dotenv_1.default.config({ path: "src/config/config.env" }); // Load variables from .env file, specify path to your env file
 // Specify the port number for the server
 const port = parseInt(process.env.PORT, 10);
 // handling uncaught error

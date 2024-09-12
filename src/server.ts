@@ -1,6 +1,14 @@
 // import app module
 import app from "./app";
 
+//update  aws config
+import AWS from "aws-sdk";
+AWS.config.update({
+  region: process.env.AWS_REGION,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+});
+
 // Import dotenv to load environment variables
 import dotenv from "dotenv";
 if (process.env.ENV == "development")

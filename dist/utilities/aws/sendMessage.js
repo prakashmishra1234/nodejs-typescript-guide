@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const aws_sdk_1 = __importDefault(require("aws-sdk"));
 // Initialize SNS service
-aws_sdk_1.default.config.update({ region: process.env.AWS_REGION });
 const sns = new aws_sdk_1.default.SNS();
 /**
  * Sends an SMS message to a specified mobile number using AWS SNS.
@@ -30,12 +29,12 @@ const sns = new aws_sdk_1.default.SNS();
  *   .catch(err => console.error('Error sending message:', err));
  */
 const SendMessage = ({ mobile, message }) => {
+    console.log(aws_sdk_1.default.config);
     return new Promise((resolve, reject) => {
         const params = {
             Message: message,
             PhoneNumber: mobile,
         };
-        console.log(aws_sdk_1.default.config);
         sns.publish(params, (err, data) => {
             if (err) {
                 reject(err);
