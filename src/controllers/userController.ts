@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import User from "../models/userModel";
 import SendMessage from "../utilities/aws/sendMessage";
 import ErrorHandler from "../utilities/others/errorHandler";
+import SendData from "../utilities/others/senData";
 
 // register user
 export const registerUser = async (
@@ -10,12 +11,26 @@ export const registerUser = async (
   next: NextFunction
 ) => {
   const { name, mobile } = req.body;
+
+  // sent OTP to mobile number via SMS
+  try {
+    await SendMessage({
+      mobile: mobile,
+      message: "you are welcome!",
+    });
+  } catch (error: any) {
+    if (error.message && error.code) {
+      return next(new ErrorHandler(error.message, parseInt(error?.code)));
+    }
+    return next(new ErrorHandler("User creation failed", 400));
+  }
+
+  // create user in db
   const user = await User.create({ name, mobile });
 
-  if (!user) return new ErrorHandler("User creation failed", 400);
+  // return error if user not created
+  if (!user) return next(new ErrorHandler("User creation failed", 400));
 
-  await SendMessage({
-    mobile: mobile,
-    message: "you are welcome!",
-  });
+  // send response to user
+  SendData(201, res, "User created successfully");
 };

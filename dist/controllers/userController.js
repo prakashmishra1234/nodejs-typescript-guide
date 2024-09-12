@@ -16,15 +16,29 @@ exports.registerUser = void 0;
 const userModel_1 = __importDefault(require("../models/userModel"));
 const sendMessage_1 = __importDefault(require("../utilities/aws/sendMessage"));
 const errorHandler_1 = __importDefault(require("../utilities/others/errorHandler"));
+const senData_1 = __importDefault(require("../utilities/others/senData"));
 // register user
 const registerUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, mobile } = req.body;
+    // sent OTP to mobile number via SMS
+    try {
+        yield (0, sendMessage_1.default)({
+            mobile: mobile,
+            message: "you are welcome!",
+        });
+    }
+    catch (error) {
+        if (error.message && error.code) {
+            return next(new errorHandler_1.default(error.message, parseInt(error === null || error === void 0 ? void 0 : error.code)));
+        }
+        return next(new errorHandler_1.default("User creation failed", 400));
+    }
+    // create user in db
     const user = yield userModel_1.default.create({ name, mobile });
+    // return error if user not created
     if (!user)
-        return new errorHandler_1.default("User creation failed", 400);
-    yield (0, sendMessage_1.default)({
-        mobile: mobile,
-        message: "you are welcome!",
-    });
+        return next(new errorHandler_1.default("User creation failed", 400));
+    // send response to user
+    (0, senData_1.default)(201, res, "User created successfully");
 });
 exports.registerUser = registerUser;

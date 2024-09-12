@@ -21,6 +21,7 @@ const ErrorMiddleware = (
   err.statusCode = err.statusCode || 500;
   err.message = err.message || "Internal Server Error";
 
+  console.log(err);
   // MongoDB CastError: Invalid ObjectId or resource not found
   if (err.name === "CastError") {
     const message = `Resource not found. Invalid: ${err.path}.`;
@@ -38,7 +39,7 @@ const ErrorMiddleware = (
     const messages = Object.values(err.errors).map(
       (error: any) => error.message
     );
-    const message: string = messages[0];
+    const message: string = messages.join(", ");
     err = new ErrorHandler(message, 400);
   }
 

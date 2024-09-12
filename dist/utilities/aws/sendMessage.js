@@ -8,34 +8,34 @@ const aws_sdk_1 = __importDefault(require("aws-sdk"));
 aws_sdk_1.default.config.update({ region: process.env.AWS_REGION });
 const sns = new aws_sdk_1.default.SNS();
 /**
- * Sends an SMS message using AWS SNS to a specified mobile number.
+ * Sends an SMS message to a specified mobile number using AWS SNS.
  *
- * @function SendMessage
- * @param {ISendMessage} params - The parameters for sending the message.
- * @param {string} params.mobile - The mobile number to send the message to. Must include the country code (e.g., +1234567890).
- * @param {string} params.message - The message content to be sent.
- * @returns {Promise<any>} - A promise that resolves with the result of the SNS publish action or rejects with an error.
+ * @param {ISendMessage} params - The parameters required to send the SMS message.
+ * @param {string} params.mobile - The mobile number to which the SMS message will be sent.
+ * @param {string} params.message - The content of the SMS message to be sent.
+ *
+ * @returns {Promise<PublishResponse>} A promise that resolves with the response from AWS SNS if the message is sent successfully, or rejects with an error if the message could not be sent.
+ *
+ * @throws {AWSError} Throws an error if there is a problem with sending the SMS message. The error object will contain details about the failure.
  *
  * @example
- * SendMessage({ mobile: '1234567890', message: 'Your OTP is 123456' })
- *   .then(result => {
- *     console.log('Message sent successfully:', result);
- *   })
- *   .catch(error => {
- *     console.error('Error sending message:', error);
- *   });
  *
- * @throws {Error} Throws an error if the SMS sending process fails.
+ * const result = await SendMessage({ mobile: '+1234567890', message: 'Hello, world!' });
+ * console.log('Message sent successfully:', result);
+ *
+ * @example
+ *
+ * SendMessage({ mobile: '+1234567890', message: 'Hello, world!' })
+ *   .then(data => console.log('Message sent successfully:', data))
+ *   .catch(err => console.error('Error sending message:', err));
  */
 const SendMessage = ({ mobile, message }) => {
-    console.log(process.env.AWS_REGION);
-    // Return a new Promise
     return new Promise((resolve, reject) => {
         const params = {
             Message: message,
             PhoneNumber: mobile,
         };
-        // Publish the message via SNS
+        console.log(aws_sdk_1.default.config);
         sns.publish(params, (err, data) => {
             if (err) {
                 reject(err);

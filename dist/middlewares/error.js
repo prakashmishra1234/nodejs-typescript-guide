@@ -19,6 +19,7 @@ req, res, next) => {
     // Set default status code to 500 if not provided
     err.statusCode = err.statusCode || 500;
     err.message = err.message || "Internal Server Error";
+    console.log(err);
     // MongoDB CastError: Invalid ObjectId or resource not found
     if (err.name === "CastError") {
         const message = `Resource not found. Invalid: ${err.path}.`;
@@ -32,7 +33,7 @@ req, res, next) => {
     // Mongodb validation error
     if (err.name === "ValidationError") {
         const messages = Object.values(err.errors).map((error) => error.message);
-        const message = messages[0];
+        const message = messages.join(", ");
         err = new errorHandler_1.default(message, 400);
     }
     // JWT token invalid error
