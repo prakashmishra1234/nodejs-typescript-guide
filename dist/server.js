@@ -12,10 +12,12 @@ if (process.env.ENV != "production")
 //update  aws config
 const aws_sdk_1 = __importDefault(require("aws-sdk"));
 aws_sdk_1.default.config.update({
-    region: process.env.AWS_REGION,
+    region: "ap-south-1", // process.env.AWS_REGION,
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
+// remove after installing v3
+require("aws-sdk/lib/maintenance_mode_message").suppress = true;
 // Specify the port number for the server
 const port = parseInt(process.env.PORT, 10);
 // handling uncaught error
