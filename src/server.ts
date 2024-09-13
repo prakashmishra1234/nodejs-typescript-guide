@@ -9,7 +9,7 @@ if (process.env.ENV != "production")
 //update  aws config
 import AWS from "aws-sdk";
 AWS.config.update({
-  region: "ap-south-1", // process.env.AWS_REGION,
+  region: process.env.AWS_REGION,
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
