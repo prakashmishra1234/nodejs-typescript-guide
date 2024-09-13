@@ -1,6 +1,11 @@
 // import app module
 import app from "./app";
 
+// Import dotenv to load environment variables
+import dotenv from "dotenv";
+if (process.env.ENV != "production")
+  dotenv.config({ path: "src/config/config.env" }); // Load variables from .env file, specify path to your env file
+
 //update  aws config
 import AWS from "aws-sdk";
 AWS.config.update({
@@ -9,10 +14,7 @@ AWS.config.update({
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
 
-// Import dotenv to load environment variables
-import dotenv from "dotenv";
-if (process.env.ENV == "development")
-  dotenv.config({ path: "src/config/config.env" }); // Load variables from .env file, specify path to your env file
+console.log(AWS.config);
 
 // Specify the port number for the server
 const port: number = parseInt(process.env.PORT as string, 10);
