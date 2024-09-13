@@ -14,8 +14,6 @@ AWS.config.update({
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
 
-console.log(AWS.config);
-
 // Specify the port number for the server
 const port: number = parseInt(process.env.PORT as string, 10);
 

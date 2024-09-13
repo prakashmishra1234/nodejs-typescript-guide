@@ -16,7 +16,6 @@ aws_sdk_1.default.config.update({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
-console.log(aws_sdk_1.default.config);
 // Specify the port number for the server
 const port = parseInt(process.env.PORT, 10);
 // handling uncaught error
