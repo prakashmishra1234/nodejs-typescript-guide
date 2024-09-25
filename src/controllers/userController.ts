@@ -12,6 +12,12 @@ export const registerUser = async (
 ) => {
   const { name, mobile } = req.body;
 
+  // create user in db
+  const user = await User.create({ name, mobile });
+
+  // return error if user not created
+  if (!user) return next(new ErrorHandler("User creation failed", 400));
+
   // sent OTP to mobile number via SMS
   try {
     await SendMessage({
@@ -24,12 +30,6 @@ export const registerUser = async (
     }
     return next(new ErrorHandler("User creation failed", 400));
   }
-
-  // create user in db
-  const user = await User.create({ name, mobile });
-
-  // return error if user not created
-  if (!user) return next(new ErrorHandler("User creation failed", 400));
 
   // send response to user
   SendData(201, res, "User created successfully");

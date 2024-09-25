@@ -12,7 +12,7 @@ if (process.env.ENV != "production")
 //update  aws config
 const aws_sdk_1 = __importDefault(require("aws-sdk"));
 aws_sdk_1.default.config.update({
-    region: "ap-south-1", // process.env.AWS_REGION,
+    region: process.env.AWS_REGION,
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });

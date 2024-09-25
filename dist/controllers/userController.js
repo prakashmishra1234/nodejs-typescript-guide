@@ -20,6 +20,11 @@ const sendData_1 = __importDefault(require("../utilities/others/sendData"));
 // register user
 const registerUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, mobile } = req.body;
+    // create user in db
+    const user = yield userModel_1.default.create({ name, mobile });
+    // return error if user not created
+    if (!user)
+        return next(new errorHandler_1.default("User creation failed", 400));
     // sent OTP to mobile number via SMS
     try {
         yield (0, sendMessage_1.default)({
@@ -33,11 +38,6 @@ const registerUser = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         }
         return next(new errorHandler_1.default("User creation failed", 400));
     }
-    // create user in db
-    const user = yield userModel_1.default.create({ name, mobile });
-    // return error if user not created
-    if (!user)
-        return next(new errorHandler_1.default("User creation failed", 400));
     // send response to user
     (0, sendData_1.default)(201, res, "User created successfully");
 });
