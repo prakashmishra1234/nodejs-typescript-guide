@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import User from "../models/userModel";
-import SendMessage from "../utilities/aws/sendMessage";
 import ErrorHandler from "../utilities/others/errorHandler";
 import SendData from "../utilities/others/sendData";
+import SendMessage from "../utilities/Twilio/sendMessage";
 
 // register user
 export const registerUser = async (

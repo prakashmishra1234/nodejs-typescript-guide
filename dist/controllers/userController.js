@@ -14,9 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.registerUser = void 0;
 const userModel_1 = __importDefault(require("../models/userModel"));
-const sendMessage_1 = __importDefault(require("../utilities/aws/sendMessage"));
 const errorHandler_1 = __importDefault(require("../utilities/others/errorHandler"));
 const sendData_1 = __importDefault(require("../utilities/others/sendData"));
+const sendMessage_1 = __importDefault(require("../utilities/Twilio/sendMessage"));
 // register user
 const registerUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, mobile } = req.body;
