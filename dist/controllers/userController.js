@@ -12,11 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerUser = void 0;
+exports.verifyOtp = exports.registerUser = void 0;
 const userModel_1 = __importDefault(require("../models/userModel"));
 const errorHandler_1 = __importDefault(require("../utilities/others/errorHandler"));
 const sendData_1 = __importDefault(require("../utilities/others/sendData"));
 const sendMessage_1 = __importDefault(require("../utilities/Twilio/sendMessage"));
+const sendToken_1 = __importDefault(require("../utilities/others/sendToken"));
+const crypto_1 = __importDefault(require("crypto"));
 // Register user
 const registerUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, mobile } = req.body;
@@ -44,3 +46,42 @@ const registerUser = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
     (0, sendData_1.default)(201, res, "User created successfully");
 });
 exports.registerUser = registerUser;
+// Verify OTP
+const verifyOtp = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { mobile, otp } = req.body;
+    // Check if mobile and OTP are provided
+    if (!mobile || !otp) {
+        return next(new errorHandler_1.default("Please provide both mobile number and OTP", 400));
+    }
+    try {
+        // Find the user based on the mobile number
+        const user = yield userModel_1.default.findOne({ mobile });
+        // Check if the user exists
+        if (!user) {
+            return next(new errorHandler_1.default("User not found", 404));
+        }
+        // Hash the entered OTP to compare it with the stored hashed OTP
+        const hashedEnteredOtp = crypto_1.default
+            .createHash("sha256")
+            .update(otp)
+            .digest("hex");
+        // Check if the hashed entered OTP matches the stored OTP
+        if (user.otp !== hashedEnteredOtp) {
+            return next(new errorHandler_1.default("Invalid OTP", 401));
+        }
+        // Check if the OTP has expired
+        if (user.otpExpire && user.otpExpire < new Date()) {
+            return next(new errorHandler_1.default("OTP has expired", 401));
+        }
+        // Clear the OTP fields after successful verification
+        user.otp = undefined;
+        user.otpExpire = undefined;
+        yield user.save();
+        // Generate a token and send it as a response
+        (0, sendToken_1.default)(user, 200, res);
+    }
+    catch (error) {
+        return next(new errorHandler_1.default("OTP verification failed", 500));
+    }
+});
+exports.verifyOtp = verifyOtp;

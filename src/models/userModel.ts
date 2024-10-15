@@ -1,6 +1,14 @@
 import mongoose, { Schema } from "mongoose";
 import { IUser } from "../types/users/User";
 import generateOTP from "../utilities/others/generateOtp";
+import crypto from "crypto";
+import jwt from "jsonwebtoken";
+
+import dotenv from "dotenv";
+
+// configuring env file
+if (process.env.ENV != "production")
+  dotenv.config({ path: "src/config/config.env" });
 
 // User Schema
 const userSchema: Schema<IUser> = new mongoose.Schema({
@@ -31,11 +39,19 @@ userSchema.methods.generateOTP = async function (length: number) {
   const otp = generateOTP(length);
   const expirationTime =
     Date.now() + parseInt(process.env.OTP_EXPIRE || "300000", 10); // Default to 5 minutes if not set
-
-  this.otp = otp;
+  // Hash the OTP using SHA-256
+  const hashedOtp = crypto.createHash("sha256").update(otp).digest("hex");
+  this.otp = hashedOtp;
   this.otpExpire = new Date(expirationTime);
   await this.save();
   return otp;
+};
+
+// generate json web token
+userSchema.methods.getJWTToken = function () {
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET || "", {
+    expiresIn: process.env.JWT_EXPIRE,
+  });
 };
 
 // Export the mongoose model

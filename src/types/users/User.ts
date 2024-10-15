@@ -12,6 +12,7 @@ import { Document } from "mongoose";
  * @property {string} [otp] - (Optional) The one-time password (OTP) for the user.
  * @property {Date} [otpExpire] - (Optional) The expiration time for the OTP.
  * @method generateOTP - Method to generate an OTP of specified length.
+ * @method getJWTToken - Method to generate a JSON Web Token for the user.
  *
  * @example
  * const user: IUser = {
@@ -19,7 +20,8 @@ import { Document } from "mongoose";
  *   mobile: "+1234567890",
  *   otp: "123456",
  *   otpExpire: new Date(),
- *   generateOTP(length: number): string;
+ *   generateOTP(length: number): Promise<string>;
+ *   getJWTToken(): string;
  * };
  */
 export interface IUser extends Document {
@@ -28,4 +30,5 @@ export interface IUser extends Document {
   otp?: string;
   otpExpire?: Date;
   generateOTP(length: number): Promise<string>;
+  getJWTToken(): string;
 }

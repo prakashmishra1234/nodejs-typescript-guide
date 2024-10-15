@@ -3,6 +3,8 @@ import User from "../models/userModel";
 import ErrorHandler from "../utilities/others/errorHandler";
 import SendData from "../utilities/others/sendData";
 import SendMessage from "../utilities/Twilio/sendMessage";
+import SendToken from "../utilities/others/sendToken";
+import crypto from "crypto";
 
 // Register user
 export const registerUser = async (
@@ -35,4 +37,56 @@ export const registerUser = async (
 
   // Send response to user
   SendData(201, res, "User created successfully");
+};
+
+// Verify OTP
+export const verifyOtp = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { mobile, otp } = req.body;
+
+  // Check if mobile and OTP are provided
+  if (!mobile || !otp) {
+    return next(
+      new ErrorHandler("Please provide both mobile number and OTP", 400)
+    );
+  }
+
+  try {
+    // Find the user based on the mobile number
+    const user = await User.findOne({ mobile });
+
+    // Check if the user exists
+    if (!user) {
+      return next(new ErrorHandler("User not found", 404));
+    }
+
+    // Hash the entered OTP to compare it with the stored hashed OTP
+    const hashedEnteredOtp = crypto
+      .createHash("sha256")
+      .update(otp)
+      .digest("hex");
+
+    // Check if the hashed entered OTP matches the stored OTP
+    if (user.otp !== hashedEnteredOtp) {
+      return next(new ErrorHandler("Invalid OTP", 401));
+    }
+
+    // Check if the OTP has expired
+    if (user.otpExpire && user.otpExpire < new Date()) {
+      return next(new ErrorHandler("OTP has expired", 401));
+    }
+
+    // Clear the OTP fields after successful verification
+    user.otp = undefined;
+    user.otpExpire = undefined;
+    await user.save();
+
+    // Generate a token and send it as a response
+    SendToken(user, 200, res);
+  } catch (error) {
+    return next(new ErrorHandler("OTP verification failed", 500));
+  }
 };

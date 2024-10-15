@@ -14,6 +14,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const generateOtp_1 = __importDefault(require("../utilities/others/generateOtp"));
+const crypto_1 = __importDefault(require("crypto"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const dotenv_1 = __importDefault(require("dotenv"));
+// configuring env file
+if (process.env.ENV != "production")
+    dotenv_1.default.config({ path: "src/config/config.env" });
 // User Schema
 const userSchema = new mongoose_1.default.Schema({
     name: {
@@ -42,10 +48,18 @@ userSchema.methods.generateOTP = function (length) {
     return __awaiter(this, void 0, void 0, function* () {
         const otp = (0, generateOtp_1.default)(length);
         const expirationTime = Date.now() + parseInt(process.env.OTP_EXPIRE || "300000", 10); // Default to 5 minutes if not set
-        this.otp = otp;
+        // Hash the OTP using SHA-256
+        const hashedOtp = crypto_1.default.createHash("sha256").update(otp).digest("hex");
+        this.otp = hashedOtp;
         this.otpExpire = new Date(expirationTime);
         yield this.save();
         return otp;
+    });
+};
+// generate json web token
+userSchema.methods.getJWTToken = function () {
+    return jsonwebtoken_1.default.sign({ id: this._id }, process.env.JWT_SECRET || "", {
+        expiresIn: process.env.JWT_EXPIRE,
     });
 };
 // Export the mongoose model
