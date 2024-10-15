@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import { IUser } from "../types/users/User";
+import generateOTP from "../utilities/others/generateOtp";
 
 // User Schema
 const userSchema: Schema<IUser> = new mongoose.Schema({
@@ -24,6 +25,18 @@ const userSchema: Schema<IUser> = new mongoose.Schema({
     required: false,
   },
 });
+
+// Method to generate OTP and set expiration
+userSchema.methods.generateOTP = async function (length: number) {
+  const otp = generateOTP(length);
+  const expirationTime =
+    Date.now() + parseInt(process.env.OTP_EXPIRE || "300000", 10); // Default to 5 minutes if not set
+
+  this.otp = otp;
+  this.otpExpire = new Date(expirationTime);
+  await this.save();
+  return otp;
+};
 
 // Export the mongoose model
 export default mongoose.model<IUser>("User", userSchema);

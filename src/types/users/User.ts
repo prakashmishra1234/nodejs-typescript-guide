@@ -11,6 +11,7 @@ import { Document } from "mongoose";
  * @property {string} mobile - The mobile number of the user.
  * @property {string} [otp] - (Optional) The one-time password (OTP) for the user.
  * @property {Date} [otpExpire] - (Optional) The expiration time for the OTP.
+ * @method generateOTP - Method to generate an OTP of specified length.
  *
  * @example
  * const user: IUser = {
@@ -18,6 +19,7 @@ import { Document } from "mongoose";
  *   mobile: "+1234567890",
  *   otp: "123456",
  *   otpExpire: new Date(),
+ *   generateOTP(length: number): string;
  * };
  */
 export interface IUser extends Document {
@@ -25,4 +27,5 @@ export interface IUser extends Document {
   mobile: string;
   otp?: string;
   otpExpire?: Date;
+  generateOTP(length: number): Promise<string>;
 }

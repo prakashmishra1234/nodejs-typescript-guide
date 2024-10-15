@@ -17,28 +17,30 @@ const userModel_1 = __importDefault(require("../models/userModel"));
 const errorHandler_1 = __importDefault(require("../utilities/others/errorHandler"));
 const sendData_1 = __importDefault(require("../utilities/others/sendData"));
 const sendMessage_1 = __importDefault(require("../utilities/Twilio/sendMessage"));
-// register user
+// Register user
 const registerUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, mobile } = req.body;
-    // create user in db
+    // Create user in the database
     const user = yield userModel_1.default.create({ name, mobile });
-    // return error if user not created
+    // Return error if user is not created
     if (!user)
         return next(new errorHandler_1.default("User creation failed", 400));
-    // sent OTP to mobile number via SMS
+    // Send OTP to mobile number via SMS
     try {
+        // Generate OTP
+        const otp = yield user.generateOTP(6);
         yield (0, sendMessage_1.default)({
             mobile: mobile,
-            message: "you are welcome!",
+            message: `Your OTP is for signing up is: ${otp}`,
         });
     }
     catch (error) {
         if (error.message && error.code) {
-            return next(new errorHandler_1.default(error.message, parseInt(error === null || error === void 0 ? void 0 : error.code)));
+            return next(new errorHandler_1.default(error.message, parseInt(error.code)));
         }
         return next(new errorHandler_1.default("User creation failed", 400));
     }
-    // send response to user
+    // Send response to user
     (0, sendData_1.default)(201, res, "User created successfully");
 });
 exports.registerUser = registerUser;
