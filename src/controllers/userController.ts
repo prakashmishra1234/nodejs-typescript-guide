@@ -5,56 +5,43 @@ import SendData from "../utilities/others/sendData";
 import SendMessage from "../utilities/Twilio/sendMessage";
 import SendToken from "../utilities/others/sendToken";
 import crypto from "crypto";
+import asyncHandler from "../middlewares/asyncHandler";
 
 // Register user
-export const registerUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { name, mobile } = req.body;
+export const registerUser = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { name, mobile } = req.body;
 
-  // Create user in the database
-  const user = await User.create({ name, mobile });
+    // Create user in the database
+    const user = await User.create({ name, mobile });
 
-  // Return error if user is not created
-  if (!user) return next(new ErrorHandler("User creation failed", 400));
+    // Return error if user is not created
+    if (!user) return next(new ErrorHandler("User creation failed", 400));
 
-  // Send OTP to mobile number via SMS
-  try {
     // Generate OTP
     const otp = await user.generateOTP(6);
     await SendMessage({
       mobile: mobile,
       message: `Your OTP is for signing up is: ${otp}`,
     });
-  } catch (error: any) {
-    if (error.message && error.code) {
-      return next(new ErrorHandler(error.message, parseInt(error.code)));
-    }
-    return next(new ErrorHandler("User creation failed", 400));
-  }
 
-  // Send response to user
-  SendData(201, res, "User created successfully");
-};
+    // Send response to user
+    SendData(201, res, "Otp has been sent successfully");
+  }
+);
 
 // Verify OTP
-export const verifyOtp = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { mobile, otp } = req.body;
+export const verifyOtp = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { mobile, otp } = req.body;
 
-  // Check if mobile and OTP are provided
-  if (!mobile || !otp) {
-    return next(
-      new ErrorHandler("Please provide both mobile number and OTP", 400)
-    );
-  }
+    // Check if mobile and OTP are provided
+    if (!mobile || !otp) {
+      return next(
+        new ErrorHandler("Please provide both mobile number and OTP", 400)
+      );
+    }
 
-  try {
     // Find the user based on the mobile number
     const user = await User.findOne({ mobile });
 
@@ -86,8 +73,28 @@ export const verifyOtp = async (
 
     // Generate a token and send it as a response
     SendToken(user, 200, res);
-  } catch (error) {
-    console.log(error);
-    return next(new ErrorHandler("OTP verification failed", 500));
   }
-};
+);
+
+// send otp
+export const sendOtp = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { mobile } = req.body;
+
+    // Find the user based on the mobile number
+    const user = await User.findOne({ mobile });
+
+    // Return error if user is not created
+    if (!user) return next(new ErrorHandler("User not found", 400));
+
+    // Generate OTP
+    const otp = await user.generateOTP(6);
+    await SendMessage({
+      mobile: mobile,
+      message: `Your OTP is for signing up is: ${otp}`,
+    });
+
+    // Send response to user
+    SendData(201, res, "User created successfully");
+  }
+);

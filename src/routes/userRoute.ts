@@ -1,10 +1,14 @@
 import express, { Router } from "express";
-import { registerUser, verifyOtp } from "../controllers/userController";
-import asyncHandler from "../middlewares/asyncHandler";
+import {
+  registerUser,
+  verifyOtp,
+  sendOtp,
+} from "../controllers/userController";
 
 const router: Router = express.Router();
 
-router.route("/register").post(asyncHandler(registerUser));
-router.route("/verifyOtp").post(asyncHandler(verifyOtp));
+router.route("/register").post(registerUser);
+router.route("/verifyOtp").post(verifyOtp);
+router.route("/sendOtp").post(sendOtp);
 
 export default router;
