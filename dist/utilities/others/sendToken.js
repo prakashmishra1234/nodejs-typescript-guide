@@ -17,12 +17,10 @@ const SendToken = (user, statusCode, res) => {
         ),
         httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
     };
-    console.log(token, options);
     // Send response with the token set as a cookie
     res.status(statusCode).cookie("token", token, options).json({
         success: true,
         user,
-        token,
     });
 };
 exports.default = SendToken;

@@ -81,6 +81,7 @@ const verifyOtp = (req, res, next) => __awaiter(void 0, void 0, void 0, function
         (0, sendToken_1.default)(user, 200, res);
     }
     catch (error) {
+        console.log(error);
         return next(new errorHandler_1.default("OTP verification failed", 500));
     }
 });

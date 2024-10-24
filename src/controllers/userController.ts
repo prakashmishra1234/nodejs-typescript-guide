@@ -87,6 +87,7 @@ export const verifyOtp = async (
     // Generate a token and send it as a response
     SendToken(user, 200, res);
   } catch (error) {
+    console.log(error);
     return next(new ErrorHandler("OTP verification failed", 500));
   }
 };
