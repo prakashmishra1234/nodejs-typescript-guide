@@ -81,6 +81,9 @@ export const sendOtp = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { mobile } = req.body;
 
+    if (!mobile)
+      return next(new ErrorHandler("Please provide mobile number", 400));
+
     // Find the user based on the mobile number
     const user = await User.findOne({ mobile });
 
@@ -95,6 +98,6 @@ export const sendOtp = asyncHandler(
     });
 
     // Send response to user
-    SendData(201, res, "User created successfully");
+    SendData(201, res, "Otp has been sent successfully");
   }
 );

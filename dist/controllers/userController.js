@@ -73,6 +73,8 @@ exports.verifyOtp = (0, asyncHandler_1.default)((req, res, next) => __awaiter(vo
 // send otp
 exports.sendOtp = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { mobile } = req.body;
+    if (!mobile)
+        return next(new errorHandler_1.default("Please provide mobile number", 400));
     // Find the user based on the mobile number
     const user = yield userModel_1.default.findOne({ mobile });
     // Return error if user is not created
@@ -85,5 +87,5 @@ exports.sendOtp = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void
         message: `Your OTP is for signing up is: ${otp}`,
     });
     // Send response to user
-    (0, sendData_1.default)(201, res, "User created successfully");
+    (0, sendData_1.default)(201, res, "Otp has been sent successfully");
 }));
