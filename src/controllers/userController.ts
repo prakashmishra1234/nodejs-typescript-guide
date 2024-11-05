@@ -12,6 +12,11 @@ export const registerUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { name, mobile } = req.body;
 
+    if (!name || !mobile)
+      return next(
+        new ErrorHandler("Please provide valid name and mobile", 400)
+      );
+
     // Create user in the database
     const user = await User.create({ name, mobile });
 
@@ -81,8 +86,7 @@ export const sendOtp = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { mobile } = req.body;
 
-    if (!mobile)
-      return next(new ErrorHandler("Please provide mobile number", 400));
+    if (!mobile) return next(new ErrorHandler("Please provide mobile", 400));
 
     // Find the user based on the mobile number
     const user = await User.findOne({ mobile });

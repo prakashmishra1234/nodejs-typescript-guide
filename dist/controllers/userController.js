@@ -23,6 +23,8 @@ const asyncHandler_1 = __importDefault(require("../middlewares/asyncHandler"));
 // Register user
 exports.registerUser = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, mobile } = req.body;
+    if (!name || !mobile)
+        return next(new errorHandler_1.default("Please provide valid name and mobile", 400));
     // Create user in the database
     const user = yield userModel_1.default.create({ name, mobile });
     // Return error if user is not created
@@ -74,7 +76,7 @@ exports.verifyOtp = (0, asyncHandler_1.default)((req, res, next) => __awaiter(vo
 exports.sendOtp = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { mobile } = req.body;
     if (!mobile)
-        return next(new errorHandler_1.default("Please provide mobile number", 400));
+        return next(new errorHandler_1.default("Please provide mobile", 400));
     // Find the user based on the mobile number
     const user = yield userModel_1.default.findOne({ mobile });
     // Return error if user is not created
