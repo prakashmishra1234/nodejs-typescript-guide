@@ -27,7 +27,7 @@ req, res, next) => {
     }
     // Mongodb dulicate field error
     if (err.code === 11000) {
-        const message = `Duplicate ${Object.keys(err.keyValue)} entered.`;
+        const message = `This ${Object.keys(err.keyValue)} already exist with us.`;
         err = new errorHandler_1.default(message, 400);
     }
     // Mongodb validation error
