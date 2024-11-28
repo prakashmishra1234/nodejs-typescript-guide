@@ -1,6 +1,14 @@
 // import app module
 import app from "./app";
 
+// enable cors option to access from different origin
+import cors, { CorsOptions } from "cors";
+const corsOptions: CorsOptions = {
+  origin: "*",
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
 // Import dotenv to load environment variables
 import dotenv from "dotenv";
 if (process.env.ENV != "production")
