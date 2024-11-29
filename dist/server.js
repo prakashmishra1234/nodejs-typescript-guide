@@ -5,6 +5,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // import app module
 const app_1 = __importDefault(require("./app"));
+// enable cors option to access from different origin
+const cors_1 = __importDefault(require("cors"));
+const corsOptions = {
+    origin: "*",
+    credentials: true,
+};
+app_1.default.use((0, cors_1.default)(corsOptions));
 // Import dotenv to load environment variables
 const dotenv_1 = __importDefault(require("dotenv"));
 if (process.env.ENV != "production")
