@@ -5,26 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // import app module
 const app_1 = __importDefault(require("./app"));
-// enable cors option to access from different origin
-const cors_1 = __importDefault(require("cors"));
-const corsOptions = {
-    origin: "*",
-    credentials: true,
-};
-app_1.default.use((0, cors_1.default)(corsOptions));
-// Import dotenv to load environment variables
-const dotenv_1 = __importDefault(require("dotenv"));
-if (process.env.ENV != "production")
-    dotenv_1.default.config({ path: "src/config/config.env" }); // Load variables from .env file, specify path to your env file
-//update  aws config
-const aws_sdk_1 = __importDefault(require("aws-sdk"));
-aws_sdk_1.default.config.update({
-    region: process.env.AWS_REGION,
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-});
-// remove after installing v3
-require("aws-sdk/lib/maintenance_mode_message").suppress = true;
 // Specify the port number for the server
 const port = parseInt(process.env.PORT, 10);
 // handling uncaught error

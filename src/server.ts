@@ -1,30 +1,6 @@
 // import app module
 import app from "./app";
 
-// enable cors option to access from different origin
-import cors, { CorsOptions } from "cors";
-const corsOptions: CorsOptions = {
-  origin: "*",
-  credentials: true,
-};
-app.use(cors(corsOptions));
-
-// Import dotenv to load environment variables
-import dotenv from "dotenv";
-if (process.env.ENV != "production")
-  dotenv.config({ path: "src/config/config.env" }); // Load variables from .env file, specify path to your env file
-
-//update  aws config
-import AWS from "aws-sdk";
-AWS.config.update({
-  region: process.env.AWS_REGION,
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-});
-
-// remove after installing v3
-require("aws-sdk/lib/maintenance_mode_message").suppress = true;
-
 // Specify the port number for the server
 const port: number = parseInt(process.env.PORT as string, 10);
 

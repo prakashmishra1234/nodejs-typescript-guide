@@ -7,8 +7,30 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 // Create an Express application
 const app = (0, express_1.default)();
+// Import dotenv to load environment variables
+const dotenv_1 = __importDefault(require("dotenv"));
+if (process.env.ENV != "production")
+    dotenv_1.default.config({ path: "src/config/config.env" }); // Load variables from .env file, specify path to your env file
 //This is middleware function in Express.js that parses incoming requests with JSON payloads and makes the parsed data available in req.body.
 app.use(express_1.default.json());
+// enable cors option to access from different origin
+const cors_1 = __importDefault(require("cors"));
+const corsOptions = {
+    origin: "*",
+    credentials: true,
+};
+app.use((0, cors_1.default)(corsOptions));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
+app.use((0, cookie_parser_1.default)());
+//update  aws config
+const aws_sdk_1 = __importDefault(require("aws-sdk"));
+aws_sdk_1.default.config.update({
+    region: process.env.AWS_REGION,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+});
+// remove after installing v3
+require("aws-sdk/lib/maintenance_mode_message").suppress = true;
 // Route import
 const userRoute_1 = __importDefault(require("./routes/userRoute"));
 app.use("/api/v1", userRoute_1.default);
