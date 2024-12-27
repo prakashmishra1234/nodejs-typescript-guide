@@ -24,7 +24,7 @@ export const registerUser = asyncHandler(
     });
 
     // Send response to user
-    SendData(201, res, "Otp has been sent successfully");
+    SendData(201, res, "Otp has been sent successfully.");
   }
 );
 
@@ -56,12 +56,12 @@ export const verifyOtp = asyncHandler(
 
     // Check if the hashed entered OTP matches the stored OTP
     if (user.otp !== hashedEnteredOtp) {
-      return next(new ErrorHandler("Invalid OTP", 401));
+      return next(new ErrorHandler("Invalid OTP.", 401));
     }
 
     // Check if the OTP has expired
     if (user.otpExpire && user.otpExpire < new Date()) {
-      return next(new ErrorHandler("OTP has expired", 401));
+      return next(new ErrorHandler("OTP has expired.", 401));
     }
 
     // Clear the OTP fields after successful verification
@@ -98,13 +98,14 @@ export const sendOtp = asyncHandler(
     });
 
     // Send response to user
-    SendData(201, res, "Otp has been sent successfully");
+    SendData(201, res, "Otp has been sent successfully.");
   }
 );
 
 // get all users (Admin)
 export const getAllUsers = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    SendData(200, res, "Otp has been sent successfully", []);
+    const users = await User.find();
+    SendData(200, res, "User fetched successfully.", users);
   }
 );
