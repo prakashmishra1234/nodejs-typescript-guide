@@ -98,3 +98,10 @@ export const sendOtp = asyncHandler(
     SendData(201, res, "Otp has been sent successfully");
   }
 );
+
+// get all users (Admin)
+export const getAllUsers = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    SendData(200, res, "Otp has been sent successfully", []);
+  }
+);

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendOtp = exports.verifyOtp = exports.registerUser = void 0;
+exports.getAllUsers = exports.sendOtp = exports.verifyOtp = exports.registerUser = void 0;
 const userModel_1 = __importDefault(require("../models/userModel"));
 const errorHandler_1 = __importDefault(require("../utilities/others/errorHandler"));
 const sendData_1 = __importDefault(require("../utilities/others/sendData"));
@@ -87,4 +87,8 @@ exports.sendOtp = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void
     });
     // Send response to user
     (0, sendData_1.default)(201, res, "Otp has been sent successfully");
+}));
+// get all users (Admin)
+exports.getAllUsers = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    (0, sendData_1.default)(200, res, "Otp has been sent successfully", []);
 }));
