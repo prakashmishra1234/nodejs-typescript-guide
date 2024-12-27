@@ -33,7 +33,7 @@ req, res, next) => {
     // Mongodb validation error
     if (err.name === "ValidationError") {
         const messages = Object.values(err.errors).map((error) => error.message);
-        const message = messages.join(", ");
+        const message = messages[0];
         err = new errorHandler_1.default(message, 400);
     }
     // JWT token invalid error
@@ -46,7 +46,6 @@ req, res, next) => {
         const message = `Json web token is expired, try again.`;
         err = new errorHandler_1.default(message, 400);
     }
-    console.error(err);
     // Send the error response
     res.status(err.statusCode).json({
         success: false,

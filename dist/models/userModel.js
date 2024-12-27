@@ -17,6 +17,7 @@ const generateOtp_1 = __importDefault(require("../utilities/others/generateOtp")
 const crypto_1 = __importDefault(require("crypto"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const roleEnum_1 = __importDefault(require("../enum/roleEnum"));
 // configuring env file
 if (process.env.ENV != "production")
     dotenv_1.default.config({ path: "src/config/config.env" });
@@ -33,6 +34,16 @@ const userSchema = new mongoose_1.default.Schema({
         unique: true,
         required: [true, "Please enter your mobile number."],
         maxlength: [15, "Please enter a valid mobile number."],
+    },
+    role: {
+        type: Number,
+        required: [true, "Please specify role."],
+        validate: {
+            validator: function (value) {
+                return Object.values(roleEnum_1.default).includes(value);
+            },
+            message: "Invalid role value.",
+        },
     },
     otp: {
         type: String,

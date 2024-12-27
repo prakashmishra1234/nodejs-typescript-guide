@@ -5,6 +5,7 @@ import crypto from "crypto";
 import jwt from "jsonwebtoken";
 
 import dotenv from "dotenv";
+import RoleEnum from "../enum/roleEnum";
 
 // configuring env file
 if (process.env.ENV != "production")
@@ -23,6 +24,16 @@ const userSchema: Schema<IUser> = new mongoose.Schema({
     unique: true,
     required: [true, "Please enter your mobile number."],
     maxlength: [15, "Please enter a valid mobile number."],
+  },
+  role: {
+    type: Number,
+    required: [true, "Please specify role."],
+    validate: {
+      validator: function (value: number) {
+        return Object.values(RoleEnum).includes(value);
+      },
+      message: "Invalid role value.",
+    },
   },
   otp: {
     type: String,

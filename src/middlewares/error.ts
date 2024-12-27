@@ -39,7 +39,7 @@ const ErrorMiddleware = (
     const messages = Object.values(err.errors).map(
       (error: any) => error.message
     );
-    const message: string = messages.join(", ");
+    const message: string = messages[0];
     err = new ErrorHandler(message, 400);
   }
 
@@ -54,8 +54,6 @@ const ErrorMiddleware = (
     const message = `Json web token is expired, try again.`;
     err = new ErrorHandler(message, 400);
   }
-
-  console.error(err);
 
   // Send the error response
   res.status(err.statusCode).json({

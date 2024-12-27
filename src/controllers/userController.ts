@@ -10,15 +10,8 @@ import asyncHandler from "../middlewares/asyncHandler";
 // Register user
 export const registerUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { name, mobile } = req.body;
-
-    if (!name || !mobile)
-      return next(
-        new ErrorHandler("Please provide valid name and mobile", 400)
-      );
-
     // Create user in the database
-    const user = await User.create({ name, mobile });
+    const user = await User.create({ ...req.body });
 
     // Return error if user is not created
     if (!user) return next(new ErrorHandler("User creation failed", 400));
@@ -26,7 +19,7 @@ export const registerUser = asyncHandler(
     // Generate OTP
     const otp = await user.generateOTP(6);
     await SendMessage({
-      mobile: mobile,
+      mobile: req.body.mobile,
       message: `Your OTP is for signing up is: ${otp}`,
     });
 

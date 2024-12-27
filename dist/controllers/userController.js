@@ -22,18 +22,15 @@ const crypto_1 = __importDefault(require("crypto"));
 const asyncHandler_1 = __importDefault(require("../middlewares/asyncHandler"));
 // Register user
 exports.registerUser = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, mobile } = req.body;
-    if (!name || !mobile)
-        return next(new errorHandler_1.default("Please provide valid name and mobile", 400));
     // Create user in the database
-    const user = yield userModel_1.default.create({ name, mobile });
+    const user = yield userModel_1.default.create(Object.assign({}, req.body));
     // Return error if user is not created
     if (!user)
         return next(new errorHandler_1.default("User creation failed", 400));
     // Generate OTP
     const otp = yield user.generateOTP(6);
     yield (0, sendMessage_1.default)({
-        mobile: mobile,
+        mobile: req.body.mobile,
         message: `Your OTP is for signing up is: ${otp}`,
     });
     // Send response to user

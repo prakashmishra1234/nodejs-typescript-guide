@@ -1,4 +1,5 @@
 import { Document } from "mongoose";
+import RoleEnum from "../../enum/roleEnum";
 
 /**
  * Interface representing a User document in MongoDB.
@@ -27,6 +28,7 @@ import { Document } from "mongoose";
 export interface IUser extends Document {
   name: string;
   mobile: string;
+  role: RoleEnum;
   otp?: string;
   otpExpire?: Date;
   generateOTP(length: number): Promise<string>;
