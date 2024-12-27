@@ -3,6 +3,8 @@ import asyncHandler from "./asyncHandler";
 import ErrorHandler from "../utilities/others/errorHandler";
 import User from "../models/userModel";
 import { Request, Response, NextFunction } from "express";
+import RoleEnum from "../enum/roleEnum";
+import { IUser } from "../types/users/User";
 
 /**
  * Middleware to check if the user is authenticated.
@@ -15,7 +17,7 @@ import { Request, Response, NextFunction } from "express";
  */
 export const isAuthenticatedUser = asyncHandler(
   async (
-    req: Request & { user?: typeof User | null },
+    req: Request & { user?: IUser | null },
     res: Response,
     next: NextFunction
   ) => {
@@ -44,16 +46,32 @@ export const isAuthenticatedUser = asyncHandler(
   }
 );
 
-// exports.authorizeRoles = (...roles) => {
-//   return (req, res, next) => {
-//     if (!roles.includes(req.user.role)) {
-//       return next(
-//         new ErrorHandler(
-//           `Role: ${req.user.role} is not allowed to access this resouce `,
-//           403
-//         )
-//       );
-//     }
-//     next();
-//   };
-// };
+/**
+ * Middleware to authorize access to specific roles.
+ *
+ * @param role - The role that is allowed to access the resource. Must match a value in the RoleEnum.
+ * @returns An Express middleware function that checks if the user has the correct role.
+ *
+ * @example
+ * // Allow access to only admin users
+ * app.use('/admin', authorizeRoles(RoleEnum.Admin));
+ *
+ * @throws {ErrorHandler} If the user's role does not match the required role, an error with a 403 status code is thrown.
+ */
+export const authorizeRoles = (role: RoleEnum) => {
+  return (
+    req: Request & { user?: IUser | null },
+    res: Response,
+    next: NextFunction
+  ) => {
+    if (req.user && role !== req.user.role) {
+      return next(
+        new ErrorHandler(
+          `${RoleEnum[req.user.role]} is not allowed to access this resouce.`,
+          403
+        )
+      );
+    }
+    next();
+  };
+};

@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var RoleEnum;
 (function (RoleEnum) {
-    RoleEnum[RoleEnum["ADMIN"] = 0] = "ADMIN";
-    RoleEnum[RoleEnum["USER"] = 1] = "USER";
+    RoleEnum[RoleEnum["Admin"] = 0] = "Admin";
+    RoleEnum[RoleEnum["User"] = 1] = "User";
 })(RoleEnum || (RoleEnum = {}));
 exports.default = RoleEnum;

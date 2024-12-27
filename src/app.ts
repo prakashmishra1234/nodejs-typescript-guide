@@ -12,6 +12,8 @@ if (process.env.ENV != "production")
 //This is middleware function in Express.js that parses incoming requests with JSON payloads and makes the parsed data available in req.body.
 app.use(express.json());
 
+app.set("trust proxy", true);
+
 // enable cors option to access from different origin
 import cors, { CorsOptions } from "cors";
 const corsOptions: CorsOptions = {

@@ -38,6 +38,7 @@ exports.registerUser = (0, asyncHandler_1.default)((req, res, next) => __awaiter
 }));
 // Verify OTP
 exports.verifyOtp = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.ip);
     const { mobile, otp } = req.body;
     // Check if mobile and OTP are provided
     if (!mobile || !otp) {

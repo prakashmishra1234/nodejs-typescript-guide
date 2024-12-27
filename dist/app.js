@@ -13,6 +13,7 @@ if (process.env.ENV != "production")
     dotenv_1.default.config({ path: "src/config/config.env" }); // Load variables from .env file, specify path to your env file
 //This is middleware function in Express.js that parses incoming requests with JSON payloads and makes the parsed data available in req.body.
 app.use(express_1.default.json());
+app.set("trust proxy", true);
 // enable cors option to access from different origin
 const cors_1 = __importDefault(require("cors"));
 const corsOptions = {

@@ -31,6 +31,7 @@ export const registerUser = asyncHandler(
 // Verify OTP
 export const verifyOtp = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.ip);
     const { mobile, otp } = req.body;
 
     // Check if mobile and OTP are provided

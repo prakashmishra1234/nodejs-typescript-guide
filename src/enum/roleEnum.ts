@@ -1,7 +1,6 @@
 enum RoleEnum {
-  ADMIN,
-  USER,
+  Admin,
+  User,
 }
 
 export default RoleEnum;
- 
