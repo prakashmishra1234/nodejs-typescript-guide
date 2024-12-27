@@ -31,7 +31,6 @@ export const registerUser = asyncHandler(
 // Verify OTP
 export const verifyOtp = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.ip);
     const { mobile, otp } = req.body;
 
     // Check if mobile and OTP are provided
@@ -68,6 +67,8 @@ export const verifyOtp = asyncHandler(
     // Clear the OTP fields after successful verification
     user.otp = undefined;
     user.otpExpire = undefined;
+    user.lastLogin = new Date();
+    user.lastLoginIP = req.ip;
     await user.save();
 
     // Generate a token and send it as a response

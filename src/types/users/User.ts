@@ -12,6 +12,8 @@ import RoleEnum from "../../enum/roleEnum";
  * @property {string} mobile - The mobile number of the user.
  * @property {string} [otp] - (Optional) The one-time password (OTP) for the user.
  * @property {Date} [otpExpire] - (Optional) The expiration time for the OTP.
+ * @property {Date} [lastLogin] - (Optional) The last login time of the user.
+ * @property {string} [lastLoginIP] - (Optional) The last login ip of the user.
  * @method generateOTP - Method to generate an OTP of specified length.
  * @method getJWTToken - Method to generate a JSON Web Token for the user.
  *
@@ -21,6 +23,8 @@ import RoleEnum from "../../enum/roleEnum";
  *   mobile: "+1234567890",
  *   otp: "123456",
  *   otpExpire: new Date(),
+ *   lastLogin?: new Date();
+ *   lastLoginIP?: "127.0.0.1";
  *   generateOTP(length: number): Promise<string>;
  *   getJWTToken(): string;
  * };
@@ -31,6 +35,8 @@ export interface IUser extends Document {
   role: RoleEnum;
   otp?: string;
   otpExpire?: Date;
+  lastLogin?: Date;
+  lastLoginIP?: string;
   generateOTP(length: number): Promise<string>;
   getJWTToken(): string;
 }

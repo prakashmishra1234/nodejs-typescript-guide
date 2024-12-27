@@ -45,6 +45,14 @@ const userSchema = new mongoose_1.default.Schema({
             message: "Invalid role value.",
         },
     },
+    lastLogin: {
+        type: Date,
+        required: false,
+    },
+    lastLoginIP: {
+        type: String,
+        required: false,
+    },
     otp: {
         type: String,
         required: false,
