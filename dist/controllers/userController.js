@@ -65,6 +65,7 @@ exports.verifyOtp = (0, asyncHandler_1.default)((req, res, next) => __awaiter(vo
     // Clear the OTP fields after successful verification
     user.otp = undefined;
     user.otpExpire = undefined;
+    // add the last login activity of user
     user.lastLogin = new Date();
     user.lastLoginIP = req.ip;
     yield user.save();
