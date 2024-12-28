@@ -34,7 +34,7 @@ exports.registerUser = (0, asyncHandler_1.default)((req, res, next) => __awaiter
         message: `Your OTP is for signing up is: ${otp}`,
     });
     // Send response to user
-    (0, sendData_1.default)(201, res, "Otp has been sent successfully");
+    (0, sendData_1.default)(201, res, "Otp has been sent successfully.");
 }));
 // Verify OTP
 exports.verifyOtp = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -56,11 +56,11 @@ exports.verifyOtp = (0, asyncHandler_1.default)((req, res, next) => __awaiter(vo
         .digest("hex");
     // Check if the hashed entered OTP matches the stored OTP
     if (user.otp !== hashedEnteredOtp) {
-        return next(new errorHandler_1.default("Invalid OTP", 401));
+        return next(new errorHandler_1.default("Invalid OTP.", 401));
     }
     // Check if the OTP has expired
     if (user.otpExpire && user.otpExpire < new Date()) {
-        return next(new errorHandler_1.default("OTP has expired", 401));
+        return next(new errorHandler_1.default("OTP has expired.", 401));
     }
     // Clear the OTP fields after successful verification
     user.otp = undefined;
@@ -89,9 +89,10 @@ exports.sendOtp = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void
         message: `Your OTP is for signing up is: ${otp}`,
     });
     // Send response to user
-    (0, sendData_1.default)(201, res, "Otp has been sent successfully");
+    (0, sendData_1.default)(201, res, "Otp has been sent successfully.");
 }));
 // get all users (Admin)
 exports.getAllUsers = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    (0, sendData_1.default)(200, res, "Otp has been sent successfully", []);
+    const users = yield userModel_1.default.find();
+    (0, sendData_1.default)(200, res, "User fetched successfully.", users);
 }));

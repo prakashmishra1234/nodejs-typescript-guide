@@ -1,6 +1,11 @@
 // import app module
 import app from "./app";
 
+// Import dotenv to load environment variables
+import dotenv from "dotenv";
+if (process.env.ENV != "production")
+  dotenv.config({ path: "src/config/config.env" }); // Load variables from .env file, specify path to your env file
+
 // Specify the port number for the server
 const port: number = parseInt(process.env.PORT as string, 10);
 

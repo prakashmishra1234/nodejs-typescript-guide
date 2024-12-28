@@ -16,11 +16,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const generateOtp_1 = __importDefault(require("../utilities/others/generateOtp"));
 const crypto_1 = __importDefault(require("crypto"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const dotenv_1 = __importDefault(require("dotenv"));
 const roleEnum_1 = __importDefault(require("../enum/roleEnum"));
-// configuring env file
-if (process.env.ENV != "production")
-    dotenv_1.default.config({ path: "src/config/config.env" });
 // User Schema
 const userSchema = new mongoose_1.default.Schema({
     name: {

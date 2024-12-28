@@ -7,10 +7,6 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import RoleEnum from "../enum/roleEnum";
 
-// configuring env file
-if (process.env.ENV != "production")
-  dotenv.config({ path: "src/config/config.env" });
-
 // User Schema
 const userSchema: Schema<IUser> = new mongoose.Schema({
   name: {

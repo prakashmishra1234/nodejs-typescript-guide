@@ -4,11 +4,6 @@ import express from "express";
 // Create an Express application
 const app = express();
 
-// Import dotenv to load environment variables
-import dotenv from "dotenv";
-if (process.env.ENV != "production")
-  dotenv.config({ path: "src/config/config.env" }); // Load variables from .env file, specify path to your env file
-
 //This is middleware function in Express.js that parses incoming requests with JSON payloads and makes the parsed data available in req.body.
 app.use(express.json());
 
