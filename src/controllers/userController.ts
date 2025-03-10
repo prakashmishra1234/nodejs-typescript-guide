@@ -6,6 +6,7 @@ import SendMessage from "../utilities/Twilio/sendMessage";
 import SendToken from "../utilities/others/sendToken";
 import crypto from "crypto";
 import asyncHandler from "../middlewares/asyncHandler";
+import ApiFeatures from "../utilities/others/apiFeatures";
 
 // Register user
 export const registerUser = asyncHandler(
@@ -105,7 +106,20 @@ export const sendOtp = asyncHandler(
 // get all users (Admin)
 export const getAllUsers = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const users = await User.find();
-    SendData(200, res, "User fetched successfully.", users);
+    const resultPerPage = 10;
+    const usersCount = await User.countDocuments();
+
+    const apiFeatures = new ApiFeatures(User.find(), req.query)
+      .search()
+      .filter()
+      .pagination(resultPerPage);
+
+    const users = await apiFeatures.getQuery();
+    const data = {
+      users: users,
+      usersCount: usersCount,
+    };
+ 
+    SendData(200, res, "User fetched successfully.", { ...data });
   }
 );

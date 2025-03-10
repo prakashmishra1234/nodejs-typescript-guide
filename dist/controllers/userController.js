@@ -20,6 +20,7 @@ const sendMessage_1 = __importDefault(require("../utilities/Twilio/sendMessage")
 const sendToken_1 = __importDefault(require("../utilities/others/sendToken"));
 const crypto_1 = __importDefault(require("crypto"));
 const asyncHandler_1 = __importDefault(require("../middlewares/asyncHandler"));
+const apiFeatures_1 = __importDefault(require("../utilities/others/apiFeatures"));
 // Register user
 exports.registerUser = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     // Create user in the database
@@ -93,6 +94,16 @@ exports.sendOtp = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void
 }));
 // get all users (Admin)
 exports.getAllUsers = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const users = yield userModel_1.default.find();
-    (0, sendData_1.default)(200, res, "User fetched successfully.", users);
+    const resultPerPage = 10;
+    const usersCount = yield userModel_1.default.countDocuments();
+    const apiFeatures = new apiFeatures_1.default(userModel_1.default.find(), req.query)
+        .search()
+        .filter()
+        .pagination(resultPerPage);
+    const users = yield apiFeatures.getQuery();
+    const data = {
+        users: users,
+        usersCount: usersCount,
+    };
+    (0, sendData_1.default)(200, res, "User fetched successfully.", Object.assign({}, data));
 }));
